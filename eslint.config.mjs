@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Supplied design packs contain reference components, not application code.
+    "design/**",
   ]),
 ]);
 
