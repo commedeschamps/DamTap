@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
-import { Nunito, Caveat } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
 
-const nunito = Nunito({
-  variable: "--font-nunito",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin", "cyrillic"],
-});
-
-const caveat = Caveat({
-  variable: "--font-caveat",
-  subsets: ["latin", "cyrillic"],
+  display: "swap",
+  fallback: ["Arial", "Helvetica", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -20,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ru" className={`${nunito.variable} ${caveat.variable}`}>
+    <html lang="ru" className={manrope.variable}>
       <body>{children}</body>
     </html>
   );
