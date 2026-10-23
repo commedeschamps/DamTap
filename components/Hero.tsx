@@ -14,7 +14,7 @@ export default function Hero({ query, onQueryChange, onSearch }: Props) {
   }
   return (
     <section className="hero" aria-labelledby="hero-title">
-      <div className="hero-art"><Image src="/images/hero.webp" fill priority unoptimized sizes="100vw" alt="Парень с пакетом свежих продуктов на фоне Астаны" className="hero-panorama" />
+      <div className="hero-art"><div className="hero-scene"><Image src="/images/hero-detailed.webp" fill priority sizes="100vw" alt="Парень с пакетом свежих продуктов на фоне Астаны" className="hero-panorama" /></div>
       <Image src="/images/leaves-tl.webp" alt="" width={230} height={108} className="hero-leaves hero-leaves-left" />
       <Image src="/images/leaves-tl.webp" alt="" width={230} height={108} className="hero-leaves hero-leaves-right" /></div>
       <div className="hero-inner">
