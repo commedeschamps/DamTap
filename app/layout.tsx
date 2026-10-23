@@ -13,8 +13,9 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "DamTap",
-  description: "Еда из кафе, пекарен и магазинов Астаны со скидкой",
+  title: "DamTap — вкусная еда по выгодной цене",
+  description: "Блюда и продукты из заведений Астаны по выгодным ценам. Находите вкусное и помогайте сокращать пищевые отходы.",
+  applicationName: "DamTap",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

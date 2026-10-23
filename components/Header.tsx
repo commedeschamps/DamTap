@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import { ChevronDown, Heart, Home, MapPin, Search, UserRound, Utensils } from "lucide-react";
+import Logo from "./Logo";
+import { ChevronDown, Heart, MapPin, Search, UserRound, Utensils } from "lucide-react";
 
 type Props = { onLogin: () => void; onFavorites: () => void; favoritesOnly: boolean; favoriteCount: number };
 
@@ -11,10 +11,7 @@ export default function Header({ onLogin, onFavorites, favoritesOnly, favoriteCo
       <a className="skip-link" href="#main">Перейти к содержимому</a>
       <header className="site-header">
         <div className="header-inner">
-          <a href="#" className="brand" aria-label="DamTap — на главную">
-            <Image src="/images/leaves-tl.webp" width={38} height={38} alt="" className="brand-leaf" />
-            <span>DamTap</span>
-          </a>
+          <a href="#" className="brand" aria-label="DamTap — на главную"><Logo /></a>
           <nav className="desktop-menu" aria-label="Основная навигация">
             <a href="#offers">Продукты</a><a href="#how-it-works">Как это работает</a>
             <a href="#business">Для бизнеса</a><a href="#about">О нас</a>
@@ -29,7 +26,7 @@ export default function Header({ onLogin, onFavorites, favoritesOnly, favoriteCo
         </div>
       </header>
       <nav className="mobile-nav" aria-label="Мобильная навигация">
-        <a href="#" aria-label="Главная"><Home size={21} /><span>Главная</span></a>
+        <a href="#" aria-label="Главная"><Logo symbolOnly /><span>Главная</span></a>
         <a href="#offers"><Utensils size={21} /><span>Продукты</span></a>
         <button onClick={onFavorites} aria-pressed={favoritesOnly}><Heart size={21} fill={favoritesOnly ? "currentColor" : "none"} /><span>Избранное{favoriteCount > 0 ? ` · ${favoriteCount}` : ""}</span></button>
         <button onClick={onLogin}><UserRound size={21} /><span>Профиль</span></button>

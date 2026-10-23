@@ -77,8 +77,11 @@ h3 { font-weight: 700; }
 .skip-link:focus { top: 12px; }
 .site-header { height: 72px; background: var(--color-white); position: relative; z-index: 5; }
 .header-inner { height: 100%; display: flex; align-items: center; gap: 24px; }
-.brand { display: inline-flex; align-items: center; gap: 8px; margin-right: 16px; color: var(--color-primary-dark); font-size: 28px; font-weight: 1000; letter-spacing: -.04em; white-space: nowrap; flex-shrink: 0; }
-.brand-leaf { width: 36px; height: 36px; object-fit: cover; transform: rotate(-25deg); }
+.brand { display: inline-flex; align-items: center; margin-right: 16px; white-space: nowrap; flex-shrink: 0; }
+.logo { display: inline-flex; align-items: center; gap: 8px; color: var(--color-primary-dark); line-height: 1; }
+.logo-symbol { width: 36px; height: 36px; flex-shrink: 0; }
+.logo-wordmark { font-family: inherit; font-size: 28px; font-weight: 800; letter-spacing: -.04em; }
+.logo-inverse { color: var(--color-white); }
 .desktop-menu { display: flex; align-items: center; gap: 28px; font-size: 14px; font-weight: 700; white-space: nowrap; }
 .desktop-menu a:hover { color: var(--color-primary); text-decoration: underline; text-underline-offset: 4px; }
 .header-city { margin-left: auto; display: flex; align-items: center; gap: 8px; color: var(--color-primary); font-size: 14px; font-weight: 700; }
@@ -170,7 +173,9 @@ h3 { font-weight: 700; }
 .business-art { position: absolute; inset: 0 0 0 auto; width: 42%; mask-image: linear-gradient(to right, transparent 0%, black 35%); }
 .business-art img { object-fit: cover; object-position: center; }
 .site-footer { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; margin-top: var(--section-space); padding-block: 32px; gap: 32px; color: var(--color-muted-readable); font-size: 14px; }
-.footer-brand { color: var(--color-primary-dark); font-size: 24px; font-weight: 1000; letter-spacing: -.04em; }
+.footer-brand { display: inline-flex; }
+.footer-brand .logo-symbol { width: 32px; height: 32px; }
+.footer-brand .logo-wordmark { font-size: 24px; }
 .footer-note { text-align: center; }
 .site-footer > .text-link { justify-self: end; }
 .app-dialog { position: fixed; inset: 0; width: min(500px, calc(100% - 32px)); margin: auto; padding: 0; border: 0; border-radius: var(--radius-card); background: var(--color-white); color: var(--color-ink); max-height: calc(100dvh - 48px); overflow: auto; box-shadow: var(--shadow-dialog); }
@@ -219,8 +224,9 @@ h3 { font-weight: 700; }
   body { padding-bottom: 96px; }
   .site-header { height: 72px; }
   .header-inner { gap: 16px; }
-  .brand { font-size: 28px; }
-  .brand-leaf { width: 32px; height: 32px; }
+  .logo-symbol { width: 32px; height: 32px; }
+  .logo-wordmark { font-size: 26px; }
+  .mobile-nav .logo-symbol { width: 22px; height: 22px; }
   .header-city, .search-link, .favorites-control, .profile-button { display: none; }
   .login-button { min-width: 80px; padding-inline: 16px; }
   .mobile-nav { display: flex; position: fixed; bottom: max(8px, env(safe-area-inset-bottom)); left: 8px; right: 8px; min-height: 72px; padding: 8px; background: var(--color-white); box-shadow: var(--shadow-navigation); z-index: 20; }
