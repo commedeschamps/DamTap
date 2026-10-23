@@ -1,0 +1,160 @@
+[
+  {
+    "id": "1",
+    "title": "Круассан с шоколадом",
+    "venue": "Пекарня Le Pain",
+    "category": "bakery",
+    "district": "Есильский район",
+    "address": "ул. Достык, 5",
+    "image": "/images/food-1.webp",
+    "distanceKm": 0.8,
+    "price": 750,
+    "oldPrice": 1900,
+    "pickupInstructions": "Выдача у стойки пекарни, вход со стороны улицы. Возьмите сумку для выпечки.",
+    "quantityLeft": 4,
+    "allergens": [
+      "Глютен",
+      "Молоко",
+      "Яйца",
+      "Орехи"
+    ],
+    "durationHours": 2.3
+  },
+  {
+    "id": "2",
+    "title": "Боул с курицей и киноа",
+    "venue": "Green Kitchen",
+    "category": "ready",
+    "district": "Нуринский район",
+    "address": "просп. Кабанбай батыра, 11",
+    "image": "/images/food-2.webp",
+    "distanceKm": 1.2,
+    "price": 1200,
+    "oldPrice": 2400,
+    "pickupInstructions": "Подойдите к кассе кафе через главный вход. Боул выдаётся в контейнере.",
+    "quantityLeft": 5,
+    "allergens": [
+      "Соя",
+      "Кунжут"
+    ],
+    "durationHours": 5.7
+  },
+  {
+    "id": "3",
+    "title": "Том ям (остаток порций)",
+    "venue": "Sapa Asian Food",
+    "category": "ready",
+    "district": "Сарыаркинский район",
+    "address": "ул. Кенесары, 24",
+    "image": "/images/food-3.webp",
+    "distanceKm": 0.6,
+    "price": 1500,
+    "oldPrice": 2500,
+    "pickupInstructions": "Заберите суп у стойки выдачи в зале. Упаковка для супа включена.",
+    "quantityLeft": 3,
+    "allergens": [
+      "Ракообразные",
+      "Рыба",
+      "Молоко"
+    ],
+    "durationHours": 3.5
+  },
+  {
+    "id": "4",
+    "title": "Сет роллов (вечерний)",
+    "venue": "Sushi Time",
+    "category": "ready",
+    "district": "Алматинский район",
+    "address": "просп. Тауелсиздик, 18",
+    "image": "/images/food-4.webp",
+    "distanceKm": 1.5,
+    "price": 2200,
+    "oldPrice": 4400,
+    "pickupInstructions": "Вход с проспекта, выдача у кассы. Роллы упакованы для самовывоза.",
+    "quantityLeft": 2,
+    "allergens": [
+      "Рыба",
+      "Молоко",
+      "Соя",
+      "Глютен"
+    ],
+    "durationHours": 1.2
+  },
+  {
+    "id": "5",
+    "title": "Торт «Красный бархат»",
+    "venue": "Sweet Day",
+    "category": "bakery",
+    "district": "Есильский район",
+    "address": "ул. Сыганак, 14",
+    "image": "/images/food-5.webp",
+    "distanceKm": 0.9,
+    "price": 1000,
+    "oldPrice": 2500,
+    "pickupInstructions": "Обратитесь к продавцу у витрины кондитерской. Для торта подготовлена коробка.",
+    "quantityLeft": 6,
+    "allergens": [
+      "Глютен",
+      "Молоко",
+      "Яйца"
+    ],
+    "durationHours": 4.1
+  },
+  {
+    "id": "6",
+    "title": "Самса с говядиной, 4 шт.",
+    "venue": "Пекарня «Дастархан»",
+    "category": "bakery",
+    "district": "Байконырский район",
+    "address": "просп. Республики, 28",
+    "image": "/images/food-1.webp",
+    "distanceKm": 0.6,
+    "price": 1000,
+    "oldPrice": 2000,
+    "pickupInstructions": "Вход со стороны проспекта, выдача у прилавка. Возьмите сумку для упаковки.",
+    "quantityLeft": 7,
+    "allergens": [
+      "Глютен",
+      "Яйца",
+      "Кунжут"
+    ],
+    "durationHours": 2
+  },
+  {
+    "id": "7",
+    "title": "Овощной салат с киноа",
+    "venue": "Кафе «Росток»",
+    "category": "ready",
+    "district": "Есильский район",
+    "address": "ул. Туркестан, 16",
+    "image": "/images/food-2.webp",
+    "distanceKm": 2.4,
+    "price": 1300,
+    "oldPrice": 2600,
+    "pickupInstructions": "Подойдите к стойке кафе на первом этаже. Салат выдаётся в закрытом контейнере.",
+    "quantityLeft": 4,
+    "allergens": [
+      "Горчица"
+    ],
+    "durationHours": 3.5
+  },
+  {
+    "id": "8",
+    "title": "Суп с морепродуктами",
+    "venue": "Кафе «Лемонграсс»",
+    "category": "ready",
+    "district": "Алматинский район",
+    "address": "просп. Абылай хана, 8",
+    "image": "/images/food-3.webp",
+    "distanceKm": 1.8,
+    "price": 1700,
+    "oldPrice": 3400,
+    "pickupInstructions": "Вход со двора, выдача у администратора кафе. Упаковка для супа включена.",
+    "quantityLeft": 3,
+    "allergens": [
+      "Рыба",
+      "Ракообразные"
+    ],
+    "durationHours": 1
+  }
+]
