@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { ChevronDown, Heart, Info, MapPin, Search, Utensils } from "lucide-react";
 import Logo from "./Logo";
 
@@ -11,7 +13,7 @@ export default function Header({ onFavorites, favoritesOnly, favoriteCount }: Pr
       <a className="skip-link" href="#main">Перейти к содержимому</a>
       <header className="site-header">
         <div className="header-inner">
-          <a href="#" className="brand" aria-label="DamTap — на главную"><Logo /></a>
+          <Link href="/" className="brand" aria-label="DamTap — на главную"><Logo priority /></Link>
           <nav className="desktop-menu" aria-label="Основная навигация">
             <a href="#offers">Предложения</a><a href="#how-it-works">Как это работает</a>
             <a href="#business">Для заведений</a><a href="#about">О DamTap</a>
@@ -24,7 +26,7 @@ export default function Header({ onFavorites, favoritesOnly, favoriteCount }: Pr
         </div>
       </header>
       <nav className="mobile-nav" aria-label="Мобильная навигация">
-        <a href="#" aria-label="Главная"><Logo symbolOnly /><span>Главная</span></a>
+        <Link href="/" aria-label="Главная"><Logo symbolOnly /><span>Главная</span></Link>
         <a href="#offers"><Utensils size={21} /><span>Предложения</span></a>
         <button onClick={onFavorites} aria-pressed={favoritesOnly}><Heart size={21} fill={favoritesOnly ? "currentColor" : "none"} /><span>Избранное{favoriteCount > 0 ? ` · ${favoriteCount}` : ""}</span></button>
         <a href="#about"><Info size={21} /><span>О DamTap</span></a>
