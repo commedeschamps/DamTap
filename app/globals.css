@@ -80,8 +80,7 @@ h3 { font-weight: 700; }
 .brand { display: inline-flex; align-items: center; margin-right: 16px; white-space: nowrap; flex-shrink: 0; }
 .logo { display: inline-flex; align-items: center; gap: 8px; color: var(--color-primary-dark); line-height: 1; }
 .logo-symbol { width: 36px; height: 36px; flex-shrink: 0; }
-.logo-wordmark { font-family: var(--font-manrope), Arial, sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -.04em; }
-.logo-inverse { color: var(--color-white); }
+.logo-horizontal { width: 144px; height: 36px; object-fit: contain; }
 .desktop-menu { display: flex; align-items: center; gap: 28px; font-size: 14px; font-weight: 600; white-space: nowrap; }
 .desktop-menu a:hover { color: var(--color-primary); text-decoration: underline; text-underline-offset: 4px; }
 .header-city { margin-left: auto; display: flex; align-items: center; gap: 8px; color: var(--color-primary); font-size: 14px; font-weight: 600; }
@@ -176,7 +175,7 @@ h3 { font-weight: 700; }
 .footer-intro { display: grid; justify-items: start; gap: 16px; max-width: 300px; }
 .footer-brand { display: inline-flex; }
 .footer-brand .logo-symbol { width: 32px; height: 32px; }
-.footer-brand .logo-wordmark { font-size: 24px; }
+.footer-brand .logo-horizontal { width: 128px; height: 32px; }
 .footer-intro small { font-size: 12px; }
 .footer-links { display: grid; justify-items: start; gap: 12px; }
 .footer-links h2 { font-size: 14px; font-weight: 700; letter-spacing: 0; color: var(--color-text); margin-bottom: 4px; }
@@ -233,7 +232,7 @@ h3 { font-weight: 700; }
   .site-header { height: 72px; }
   .header-inner { gap: 16px; }
   .logo-symbol { width: 32px; height: 32px; }
-  .logo-wordmark { font-size: 26px; }
+  .logo-horizontal { width: 128px; height: 32px; }
   .header-actions { display: none; }
   .header-city { display: flex; }
   .mobile-nav { display: flex; position: fixed; bottom: max(8px, env(safe-area-inset-bottom)); left: 8px; right: 8px; min-height: 72px; padding: 8px; background: var(--color-white); box-shadow: var(--shadow-navigation); z-index: 20; }

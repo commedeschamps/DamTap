@@ -1,10 +1,11 @@
+import Link from "next/link";
 import Logo from "./Logo";
 
 export default function Footer() {
   return (
     <footer className="site-footer page-container" id="about">
       <div className="footer-intro">
-        <a href="#" className="footer-brand" aria-label="DamTap — на главную"><Logo /></a>
+        <Link href="/" className="footer-brand" aria-label="DamTap — на главную"><Logo /></Link>
         <p>Еда со скидкой. Больше вкуса, меньше отходов.</p>
         <small>© {new Date().getFullYear()} DamTap</small>
       </div>
