@@ -13,8 +13,8 @@ export default function Header({ onLogin, onFavorites, favoritesOnly, favoriteCo
         <div className="header-inner">
           <a href="#" className="brand" aria-label="DamTap — на главную"><Logo /></a>
           <nav className="desktop-menu" aria-label="Основная навигация">
-            <a href="#offers">Продукты</a><a href="#how-it-works">Как это работает</a>
-            <a href="#business">Для бизнеса</a><a href="#about">О нас</a>
+            <a href="#offers">Предложения</a><a href="#how-it-works">Как это работает</a>
+            <a href="#business">Для заведений</a><a href="#about">О DamTap</a>
           </nav>
           <label className="header-city"><MapPin size={19} aria-hidden="true" /><span className="sr-only">Ваш город</span><select defaultValue="Астана"><option>Астана</option></select><ChevronDown size={14} aria-hidden="true" /></label>
           <div className="header-actions">
@@ -27,7 +27,7 @@ export default function Header({ onLogin, onFavorites, favoritesOnly, favoriteCo
       </header>
       <nav className="mobile-nav" aria-label="Мобильная навигация">
         <a href="#" aria-label="Главная"><Logo symbolOnly /><span>Главная</span></a>
-        <a href="#offers"><Utensils size={21} /><span>Продукты</span></a>
+        <a href="#offers"><Utensils size={21} /><span>Предложения</span></a>
         <button onClick={onFavorites} aria-pressed={favoritesOnly}><Heart size={21} fill={favoritesOnly ? "currentColor" : "none"} /><span>Избранное{favoriteCount > 0 ? ` · ${favoriteCount}` : ""}</span></button>
         <button onClick={onLogin}><UserRound size={21} /><span>Профиль</span></button>
       </nav>

@@ -19,13 +19,13 @@ export default function Hero({ query, onQueryChange, onSearch }: Props) {
       <Image src="/images/leaves-tl.webp" alt="" width={230} height={108} className="hero-leaves hero-leaves-right" /></div>
       <div className="hero-inner">
         <div className="hero-copy">
-          <h1 id="hero-title"><span>Вкусная еда</span>{" "}<span>не должна</span>{" "}<span>пропадать</span></h1>
-          <p>DamTap — это маркетплейс, где кафе, магазины и пекарни предлагают качественные продукты со скидкой, а мы вместе уменьшаем пищевые отходы в Казахстане.</p>
-          <div className="hero-buttons"><a href="#offers" className="button button-primary">Найти еду рядом <ArrowRight size={17} /></a><a href="#how-it-works" className="button button-outline">Как это работает</a></div>
+          <h1 id="hero-title"><span>Находите вкусное.</span>{" "}<span>Платите меньше.</span></h1>
+          <p>Любимые блюда из заведений вашего города по выгодным ценам.</p>
+          <div className="hero-buttons"><a href="#offers" className="button button-primary">Смотреть предложения <ArrowRight size={17} /></a><a href="#how-it-works" className="button button-outline">Как это работает</a></div>
         </div>
       </div>
       <form className="food-search" onSubmit={search} role="search" aria-label="Поиск еды рядом">
-        <div className="search-input-wrap"><Search size={23} aria-hidden="true" /><label htmlFor="food-search" className="sr-only">Название продукта, кафе или района</label><input id="food-search" name="query" type="search" value={query} onChange={event => onQueryChange(event.target.value)} placeholder="Введите название продукта, кафе или района" /></div>
+        <div className="search-input-wrap"><Search size={23} aria-hidden="true" /><label htmlFor="food-search" className="sr-only">Название блюда, заведения, район или адрес</label><input id="food-search" name="query" type="search" value={query} onChange={event => onQueryChange(event.target.value)} placeholder="Блюдо, заведение или адрес" /></div>
         <label className="search-city"><MapPin size={20} aria-hidden="true" /><span className="sr-only">Город поиска</span><select name="city" defaultValue="Астана"><option>Астана</option></select><ChevronDown size={14} aria-hidden="true" /></label>
         <button className="button button-primary" type="submit">Найти</button>
       </form>
