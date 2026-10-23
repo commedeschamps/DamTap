@@ -8,7 +8,7 @@ const benefits = [
   { Icon: ChartNoAxesColumnIncreasing, label: <>Больше клиентов<br />и выручки</> },
   { Icon: Leaf, label: <>Меньше<br />пищевых отходов</> },
   { Icon: UsersRound, label: <>Простая<br />и удобная платформа</> },
-  { Icon: Heart, label: <>Поддержка<br />на каждом этапе</> },
+  { Icon: Heart, label: <>Бережное<br />отношение к еде</> },
 ];
 
 export default function BusinessBanner({ onPartner }: { onPartner: () => void }) {
@@ -25,9 +25,9 @@ export default function BusinessBanner({ onPartner }: { onPartner: () => void })
       <div className="business-content">
         <div className="business-copy">
           <h2 id="business-title">Вы представитель бизнеса?</h2>
-          <p>Присоединяйтесь к DamTap и находите новых клиентов,<br className="desktop-break" /> сокращая пищевые отходы.</p>
+          <p>Дайте хорошей еде ещё один шанс,<br className="desktop-break" /> сокращая излишки и пищевые отходы.</p>
           <div className="business-buttons">
-            <button className="button button-primary" onClick={onPartner}>Стать партнёром <ArrowRight size={16} /></button>
+            <button className="button button-primary" onClick={onPartner}>Условия подключения <ArrowRight size={16} /></button>
             <a className="button button-outline" href="#how-it-works">Узнать больше</a>
           </div>
         </div>
