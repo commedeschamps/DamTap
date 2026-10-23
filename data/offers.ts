@@ -13,6 +13,19 @@ export type Offer = {
   allergens: string[];
 };
 
+export type OfferSort = "recommended" | "distance" | "price" | "ending" | "discount";
+
+export function sortOffers(offers: Offer[], sort: OfferSort): Offer[] {
+  const sorted = [...offers];
+  switch (sort) {
+    case "distance": return sorted.sort((a, b) => a.distanceKm - b.distanceKm);
+    case "price": return sorted.sort((a, b) => a.price - b.price);
+    case "ending": return sorted.sort((a, b) => Date.parse(a.endsAt) - Date.parse(b.endsAt));
+    case "discount": return sorted.sort((a, b) => (a.oldPrice > 0 ? a.price / a.oldPrice : 1) - (b.oldPrice > 0 ? b.price / b.oldPrice : 1));
+    default: return sorted;
+  }
+}
+
 const startedAt = Date.now();
 const durationHours = [2.3, 5.7, 3.5, 1.2, 4.1, 2, 3.5, 1];
 const expiresIn = (hours: number) => new Date(startedAt + hours * 3_600_000).toISOString();

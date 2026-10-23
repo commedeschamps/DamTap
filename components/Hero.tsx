@@ -4,12 +4,12 @@ import Image from "next/image";
 import { ArrowRight, ChevronDown, MapPin, Search } from "lucide-react";
 import { FormEvent } from "react";
 
-type Props = { onSearch: (query: string) => void };
+type Props = { query: string; onQueryChange: (query: string) => void; onSearch: () => void };
 
-export default function Hero({ onSearch }: Props) {
+export default function Hero({ query, onQueryChange, onSearch }: Props) {
   function search(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    onSearch(String(new FormData(event.currentTarget).get("query") ?? ""));
+    onSearch();
     document.getElementById("offers")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
   return (
@@ -25,7 +25,7 @@ export default function Hero({ onSearch }: Props) {
         </div>
       </div>
       <form className="food-search" onSubmit={search} role="search" aria-label="Поиск еды рядом">
-        <div className="search-input-wrap"><Search size={23} aria-hidden="true" /><label htmlFor="food-search" className="sr-only">Название продукта, кафе или района</label><input id="food-search" name="query" type="search" placeholder="Введите название продукта, кафе или района" /></div>
+        <div className="search-input-wrap"><Search size={23} aria-hidden="true" /><label htmlFor="food-search" className="sr-only">Название продукта, кафе или района</label><input id="food-search" name="query" type="search" value={query} onChange={event => onQueryChange(event.target.value)} placeholder="Введите название продукта, кафе или района" /></div>
         <label className="search-city"><MapPin size={20} aria-hidden="true" /><span className="sr-only">Город поиска</span><select name="city" defaultValue="Астана"><option>Астана</option></select><ChevronDown size={14} aria-hidden="true" /></label>
         <button className="button button-primary" type="submit">Найти</button>
       </form>

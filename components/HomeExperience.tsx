@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { CheckCircle2, X } from "lucide-react";
-import type { Offer } from "@/data/offers";
+import { sortOffers, type Offer, type OfferSort } from "@/data/offers";
 import Header from "./Header";
 import Hero from "./Hero";
 import CategoryRow from "./CategoryRow";
@@ -20,10 +20,12 @@ type DialogState = "login" | "business" | Offer | null;
 
 export default function HomeExperience({ offers }: { offers: Offer[] }) {
   const [query, setQuery] = useState("");
+  const [searchInput, setSearchInput] = useState("");
   const [category, setCategory] = useState("all");
   const [favorites, favorite] = useFavorites();
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [sort, setSort] = useState<OfferSort>("recommended");
   const [dialog, setDialog] = useState<DialogState>(null);
   const [submitted, setSubmitted] = useState(false);
   const modal = useRef<HTMLDialogElement>(null);
@@ -43,18 +45,19 @@ export default function HomeExperience({ offers }: { offers: Offer[] }) {
   }, [dialog]);
 
   function openDialog(value: DialogState) { setSubmitted(false); setDialog(value); }
-  function reset() { setQuery(""); setCategory("all"); setFavoritesOnly(false); setShowAll(false); }
+  function reset() { setQuery(""); setSearchInput(""); setCategory("all"); setFavoritesOnly(false); setShowAll(false); setSort("recommended"); }
   function submit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); setSubmitted(true); }
   const filtered = offers.filter(offer => (!favoritesOnly || favorites.includes(offer.id)) && (category === "all" || categoryIds[offer.id] === category) && `${offer.title} ${offer.venue} Астана`.toLocaleLowerCase("ru").includes(query.trim().toLocaleLowerCase("ru")));
-  const displayed = showAll ? filtered : filtered.slice(0, 5);
+  const sorted = sortOffers(filtered, sort);
+  const displayed = showAll ? sorted : sorted.slice(0, 5);
   const detail = typeof dialog === "object" ? dialog : null;
   return (
     <>
-      <Header onLogin={() => openDialog("login")} onFavorites={() => { setFavoritesOnly(!favoritesOnly); setCategory("all"); setQuery(""); document.getElementById("offers")?.scrollIntoView({ behavior: "smooth" }); }} favoritesOnly={favoritesOnly} favoriteCount={favorites.length} />
+      <Header onLogin={() => openDialog("login")} onFavorites={() => { setFavoritesOnly(!favoritesOnly); setCategory("all"); setQuery(""); setSearchInput(""); document.getElementById("offers")?.scrollIntoView({ behavior: "smooth" }); }} favoritesOnly={favoritesOnly} favoriteCount={favorites.length} />
       <main id="main">
-        <Hero onSearch={value => { setQuery(value); setFavoritesOnly(false); setShowAll(true); }} />
+        <Hero query={searchInput} onQueryChange={setSearchInput} onSearch={() => { setQuery(searchInput); setFavoritesOnly(false); setShowAll(true); }} />
         <CategoryRow selected={category} onSelect={value => { setCategory(value); setShowAll(true); setFavoritesOnly(false); }} />
-        <OfferStrip offers={displayed} favoriteIds={favorites} onFavorite={favorite} onOpen={offer => openDialog(offer)} onViewAll={() => setShowAll(!showAll)} onReset={reset} showAll={showAll} filtered={!!query || category !== "all" || favoritesOnly} favoritesOnly={favoritesOnly} />
+        <OfferStrip offers={displayed} totalCount={filtered.length} sort={sort} onSort={setSort} favoriteIds={favorites} onFavorite={favorite} onOpen={offer => openDialog(offer)} onViewAll={() => setShowAll(!showAll)} onReset={reset} showAll={showAll} filtered={!!query || category !== "all" || favoritesOnly} favoritesOnly={favoritesOnly} />
         <HowItWorks />
         <BusinessBanner onPartner={() => openDialog("business")} />
       </main>
