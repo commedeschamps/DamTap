@@ -1,0 +1,18 @@
+@startuml
+title DamTap - System Context (24 Oct 2026)
+left to right direction
+actor Customer
+actor "Food Business" as Business
+actor Administrator
+rectangle "DamTap Platform" as DamTap
+Customer --> DamTap : Browse/search offers\nReserve portions [current]
+Business --> DamTap : Partner application [current]\nManage offers/pricing [planned]
+Administrator --> DamTap : Create offer via admin API [current]\nModeration [planned]
+rectangle "Food-safety constraints" as Safety
+Safety ..> DamTap : Mandatory cutoff rules
+note bottom of DamTap
+Current: Next.js + Spring Boot + H2.
+Planned: RBAC, PostgreSQL, dynamic markdown.
+No public deployment verified.
+end note
+@enduml

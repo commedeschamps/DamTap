@@ -1,0 +1,39 @@
+@startuml
+title DamTap - Component Diagram
+skinparam componentStyle rectangle
+actor Customer
+actor "Food Business" as Business
+package "Next.js Frontend" {
+ [Marketplace UI] as UI
+ [Business UI (planned)] as BusinessUI
+}
+package "Spring Boot REST Backend" {
+ [REST Controller] as API
+ [Catalog] as Catalog
+ [Reservations] as Booking
+ [Partner Applications] as Partner
+ [Auth / RBAC (planned)] as Auth
+ [Dynamic Pricing (planned)] as Pricing
+ [Price Audit (planned)] as Audit
+}
+database "H2 (current)" as H2
+database "PostgreSQL (planned)" as PG
+Customer --> UI
+Business ..> BusinessUI
+UI --> API : REST/JSON
+BusinessUI ..> API : REST/JSON
+API --> Catalog
+API --> Booking
+API --> Partner
+API ..> Auth
+API ..> Pricing
+Booking --> Catalog : Lock offer row
+Booking ..> Pricing : Server price snapshot
+Pricing ..> Audit
+Catalog --> H2
+Booking --> H2
+Partner --> H2
+Catalog ..> PG
+Booking ..> PG
+Pricing ..> PG
+@enduml

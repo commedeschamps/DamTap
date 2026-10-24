@@ -1,0 +1,38 @@
+@startuml
+title DamTap - Use Cases
+left to right direction
+actor Customer
+actor "Food Business" as Business
+actor Administrator
+rectangle DamTap {
+ usecase "Browse offers" as Browse
+ usecase "Search/filter/sort" as Search
+ usecase "View pickup and allergens" as View
+ usecase "Save local favorite" as Fav
+ usecase "Reserve portion" as Reserve
+ usecase "Submit partner application" as Apply
+ usecase "Create offer via admin API" as Create
+ usecase "Authenticate [planned]" as Auth
+ usecase "Manage own offers [planned]" as Manage
+ usecase "Configure dynamic pricing [planned]" as Price
+ usecase "Cancel reservation [planned]" as Cancel
+ usecase "Confirm pickup [planned]" as Pickup
+}
+Customer --> Browse
+Customer --> Search
+Customer --> View
+Customer --> Fav
+Customer --> Reserve
+Business --> Apply
+Administrator --> Create
+Customer ..> Auth
+Business ..> Auth
+Business ..> Manage
+Business ..> Price
+Customer ..> Cancel
+Business ..> Pickup
+note right of Reserve
+Current: server-authoritative total
+and transactional stock decrement.
+end note
+@enduml
