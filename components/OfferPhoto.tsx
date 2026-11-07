@@ -13,7 +13,7 @@ export default function OfferPhoto({ offer }: { offer: Offer }) {
     <Zoom a11yNameButtonZoom="Увеличить изображение" a11yNameButtonUnzoom="Закрыть увеличенное изображение" IconZoom={ZoomIn} IconUnzoom={X} zoomMargin={24} zoomImg={{ src: offer.image, alt }} classDialog="damtap-image-zoom">
       <div className={`detail-photo${offer.imageIsIllustration ? " detail-photo-illustration" : ""}`}>
         <Image src={offer.image} alt={alt} fill priority sizes="(max-width: 767px) calc(100vw - 32px), (max-width: 1200px) 50vw, 640px" />
-        <span className="discount">−{discount}%</span>
+        {discount > 0 && <span className="discount">−{discount}%</span>}
         {offer.imageIsIllustration && <span className="image-caption">Иллюстрация категории</span>}
       </div>
     </Zoom>

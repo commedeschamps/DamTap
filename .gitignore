@@ -11,6 +11,7 @@ node_modules/
 # Next.js, frontend output and test coverage
 .next/
 /out/
+/output/
 /build/
 coverage/
 .vercel/

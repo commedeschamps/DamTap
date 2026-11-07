@@ -27,6 +27,7 @@ export default function OfferStrip({ offers, totalCount, sort, onSort, favoriteI
   return <section className="offer-section page-container" id="offers" aria-labelledby="offers-title" aria-roledescription="карусель">
     <div className="section-heading"><h2 id="offers-title">Вкусное рядом</h2><Link className="text-link" href={`/offers${sort === "recommended" ? "" : `?sort=${sort}`}`}>Смотреть все<ArrowRight size={18} /></Link></div>
     {offers.length > 0 ? <div className="offer-toolbar"><p className="filter-status">Показано: {offers.length} из {totalCount}</p><div className="offer-sort"><SelectControl label="Сортировка" value={sort} onValueChange={value => onSort(value as OfferSort)} options={sortOptions} icon={<ArrowDownUp size={16} />} /></div></div> : <p className="demo-note">Сроки демонстрационных предложений истекли. На сегодня предложений больше нет.</p>}
+    {offers.length > 0 && <p className="demo-note home-demo-note">Демо-предложения: цены и наличие не подтверждены.</p>}
     <div className="offer-carousel-viewport" ref={viewport} tabIndex={0} aria-label="Лента предложений. Используйте стрелки влево и вправо" onKeyDown={event => {
       if (event.target !== event.currentTarget) return;
       if (event.key === "ArrowLeft") { event.preventDefault(); carousel?.scrollPrev(!!reducedMotion); }

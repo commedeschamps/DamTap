@@ -53,7 +53,7 @@ export default function OfferSearch({ offers, query, hasFilters, onSearch }: Pro
             if (event.key === "Escape") { event.preventDefault(); setOpen(false); }
             if ((event.key === "ArrowDown" || event.key === "ArrowUp") && !open) { event.preventDefault(); setOpen(true); }
             if (event.key === "Enter" && !open && !event.nativeEvent.isComposing) { event.preventDefault(); select(value.trim()); }
-          }} placeholder="Блюдо, заведение или адрес" autoComplete="off" enterKeyHint="search"><input role="combobox" aria-expanded={open} aria-controls={open ? resultsId : undefined} /></Command.Input>
+          }} placeholder="Блюдо, заведение или адрес…" autoComplete="off" enterKeyHint="search"><input name="query" role="combobox" aria-expanded={open} aria-controls={open ? resultsId : undefined} /></Command.Input>
           {value ? <button type="button" className="icon-button search-clear" aria-label="Очистить поиск" onClick={() => { input.current?.focus(); select(""); }}><X size={18} /></button> : <kbd className="search-shortcut">⌘ / Ctrl K</kbd>}
           <button className="button button-primary" type="submit">Найти</button>
         </form>

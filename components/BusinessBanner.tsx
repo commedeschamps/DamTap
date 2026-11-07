@@ -2,12 +2,10 @@
 
 import Image from "next/image";
 import businessBanner from "@/public/images/business-banner.webp";
-import { ArrowRight, ChartNoAxesColumnIncreasing, Heart, Leaf, UsersRound } from "lucide-react";
+import { ArrowRight, Heart, Leaf } from "lucide-react";
 
 const benefits = [
-  { Icon: ChartNoAxesColumnIncreasing, label: <>Больше клиентов<br />и выручки</> },
   { Icon: Leaf, label: <>Меньше<br />пищевых отходов</> },
-  { Icon: UsersRound, label: <>Простая<br />и удобная платформа</> },
   { Icon: Heart, label: <>Бережное<br />отношение к еде</> },
 ];
 
@@ -19,7 +17,7 @@ export default function BusinessBanner({ onPartner }: { onPartner: () => void })
           src={businessBanner}
           fill
           alt="Уютное кафе с террасой в Астане"
-          sizes="(max-width: 1023px) 1200px, 1800px"
+          sizes="(max-width: 767px) calc(100vw - 32px), 50vw"
         />
       </div>
       <div className="business-content">
@@ -28,7 +26,7 @@ export default function BusinessBanner({ onPartner }: { onPartner: () => void })
           <p>Дайте хорошей еде ещё один шанс,<br className="desktop-break" /> сокращая излишки и пищевые отходы.</p>
           <div className="business-buttons">
             <button className="button button-primary" onClick={onPartner}>Условия подключения <ArrowRight size={16} /></button>
-            <a className="button button-outline" href="#how-it-works">Узнать больше</a>
+            <a className="text-link" href="#how-it-works">Как работает сервис</a>
           </div>
         </div>
         <ul className="business-benefits">

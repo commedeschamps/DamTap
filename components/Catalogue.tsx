@@ -71,11 +71,11 @@ export default function Catalogue({ offers, initialNow }: { offers: Offer[]; ini
         <button aria-pressed={filters.favorites} onClick={() => update({ favorites: !filters.favorites })}><Heart size={16} aria-hidden="true" />Избранное</button>
       </div>
       <div className="catalogue-layout">
-        <aside className="catalogue-sidebar" aria-label="Фильтры предложений"><h2>Фильтры</h2>{panel}</aside>
+        <aside className="catalogue-sidebar" aria-label="Фильтры предложений"><h2><SlidersHorizontal size={18} aria-hidden="true" />Фильтры</h2>{panel}</aside>
         <section className="catalogue-results" aria-labelledby="catalogue-results-title">
           <div className="catalogue-toolbar">
-            <h2 id="catalogue-results-title" className="result-count"><span role="status">Найдено: <AnimatedNumber value={results.length} /></span></h2>
-            <Drawer.Root open={drawerOpen} onOpenChange={setDrawerOpen} handleOnly autoFocus shouldScaleBackground={false}>
+            <h2 id="catalogue-results-title" className="result-count"><span role="status" aria-atomic="true">Найдено: <AnimatedNumber value={results.length} /></span></h2>
+            <Drawer.Root open={drawerOpen} onOpenChange={setDrawerOpen} handleOnly shouldScaleBackground={false}>
               <Drawer.Trigger className="button button-outline mobile-filter-trigger"><SlidersHorizontal size={18} />Фильтры{chips.length > 0 ? ` · ${chips.length}` : ""}</Drawer.Trigger>
               <Drawer.Portal><Drawer.Overlay className="filter-overlay vaul-filter-overlay" /><Drawer.Content className="filter-drawer vaul-filter-drawer">
                 <div className="drawer-handle-area"><Drawer.Handle className="drawer-handle" aria-label="Потяните вниз, чтобы закрыть фильтры" /></div>
