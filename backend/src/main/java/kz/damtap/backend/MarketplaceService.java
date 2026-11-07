@@ -69,7 +69,8 @@ class MarketplaceService {
     }
 
     @Transactional
-    ReservationView reserve(ReservationInput input) {
+    ReservationView reserve(ReservationInput input, String customerId) {
+        requireCustomer(customerId);
         // A database row lock serializes concurrent reservations of the same offer.
         Offer offer = offers.findForReservation(input.offerId())
                 .orElseThrow(() -> error(HttpStatus.NOT_FOUND, "Предложение не найдено."));
@@ -80,23 +81,47 @@ class MarketplaceService {
         if (input.quantity() > offer.quantityLeft) {
             throw error(HttpStatus.CONFLICT, "Недостаточно порций. Обновите страницу.");
         }
+        // The offer row lock also serializes this aggregate check for the same offer.
+        if (reservations.portionsForCustomer(offer.id, customerId) + input.quantity() > 3) {
+            throw error(HttpStatus.TOO_MANY_REQUESTS, "Не больше трёх порций одного предложения на покупателя.");
+        }
         offer.quantityLeft -= input.quantity();
-        return ReservationView.from(reservations.save(new Reservation(offer, input.quantity(), now)));
+        return ReservationView.from(reservations.save(new Reservation(offer, input.quantity(), now, customerId)));
     }
 
-    ReservationView reservation(UUID id) {
-        return ReservationView.from(reservations.findById(id)
+    ReservationView reservation(UUID id, String customerId) {
+        requireCustomer(customerId);
+        return ReservationView.from(reservations.findOwned(id, customerId)
                 .orElseThrow(() -> error(HttpStatus.NOT_FOUND, "Бронь не найдена.")));
     }
 
     @Transactional
-    PartnerReceipt apply(PartnerInput input) {
-        PartnerApplication application = partners.save(new PartnerApplication(input, clock.instant()));
+    PartnerReceipt apply(PartnerInput input, String applicantId, String verifiedEmail, boolean emailVerified) {
+        requireCustomer(applicantId);
+        String email = input.email().strip().toLowerCase(Locale.ROOT);
+        if (!emailVerified || verifiedEmail == null || !email.equals(verifiedEmail.strip().toLowerCase(Locale.ROOT))) {
+            throw error(HttpStatus.FORBIDDEN, "Используйте подтверждённый email своего аккаунта.");
+        }
+        var owned = partners.findFirstByApplicantId(applicantId);
+        if (owned.isPresent()) {
+            PartnerApplication application = owned.get();
+            return new PartnerReceipt(application.id.toString(), application.createdAt);
+        }
+        if (partners.findFirstByEmailIgnoreCaseOrderByCreatedAtAsc(email).isPresent()) {
+            throw error(HttpStatus.CONFLICT, "Заявка с этим адресом уже зарегистрирована.");
+        }
+        PartnerApplication application = partners.saveAndFlush(new PartnerApplication(input, clock.instant(), applicantId));
         return new PartnerReceipt(application.id.toString(), application.createdAt);
     }
 
     List<PartnerView> partnerApplications() {
         return partners.findAllByOrderByCreatedAtDesc().stream().map(PartnerView::from).toList();
+    }
+
+    private static void requireCustomer(String customerId) {
+        if (customerId == null || customerId.isBlank() || customerId.length() > 200) {
+            throw error(HttpStatus.UNAUTHORIZED, "Требуется подтверждённая личность покупателя.");
+        }
     }
 
     private static ResponseStatusException error(HttpStatus status, String message) {

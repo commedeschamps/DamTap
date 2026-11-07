@@ -20,6 +20,12 @@ class AdminDisabledTest {
     @Autowired MockMvc mvc;
 
     @Test
+    void reservationsFailClosedUntilCustomerAuthenticationIsConfigured() throws Exception {
+        mvc.perform(get("/api/reservations/00000000-0000-0000-0000-000000000000"))
+                .andExpect(status().isServiceUnavailable());
+    }
+
+    @Test
     void adminApiIsDisabledUntilAnEnvironmentKeyIsConfigured() throws Exception {
         mvc.perform(get("/api/admin/partner-applications").header("X-Admin-Key", "anything"))
                 .andExpect(status().isServiceUnavailable());

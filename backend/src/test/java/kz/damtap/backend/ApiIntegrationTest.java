@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -71,7 +72,7 @@ class ApiIntegrationTest {
         expired.endsAt = Instant.now().minusSeconds(60);
         offers.saveAndFlush(expired);
         mvc.perform(get("/api/offers")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(0)));
-        mvc.perform(post("/api/reservations").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/api/reservations").with(jwt()).contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(Map.of("offerId", expiredId, "quantity", 1))))
                 .andExpect(status().isConflict());
         assertThat(reservations.count()).isZero();
@@ -80,14 +81,14 @@ class ApiIntegrationTest {
     @Test
     void reservationUsesServerPriceAndPersistsRemainingStock() throws Exception {
         String offerId = createOffer("Круассан", "bakery", 750, 3);
-        String body = mvc.perform(post("/api/reservations").contentType(MediaType.APPLICATION_JSON)
+        String body = mvc.perform(post("/api/reservations").with(jwt()).contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(Map.of("offerId", offerId, "quantity", 2))))
                 .andExpect(status().isCreated()).andExpect(header().exists("Location"))
                 .andExpect(jsonPath("$.totalPrice").value(1500))
                 .andExpect(jsonPath("$.quantityLeft").value(1))
                 .andReturn().getResponse().getContentAsString();
         String id = mapper.readTree(body).get("id").asText();
-        mvc.perform(get("/api/reservations/" + id)).andExpect(status().isOk())
+        mvc.perform(get("/api/reservations/" + id).with(jwt())).andExpect(status().isOk())
                 .andExpect(jsonPath("$.quantity").value(2))
                 .andExpect(jsonPath("$.unitPrice").value(750));
         assertThat(offers.findById(offerId).orElseThrow().quantityLeft).isEqualTo(1);
@@ -97,7 +98,7 @@ class ApiIntegrationTest {
     @Test
     void insufficientStockDoesNotCreateReservationOrDecrementStock() throws Exception {
         String offerId = createOffer("Круассан", "bakery", 750, 1);
-        mvc.perform(post("/api/reservations").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/api/reservations").with(jwt()).contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(Map.of("offerId", offerId, "quantity", 2))))
                 .andExpect(status().isConflict()).andExpect(jsonPath("$.detail").isString());
         assertThat(offers.findById(offerId).orElseThrow().quantityLeft).isEqualTo(1);
@@ -113,7 +114,7 @@ class ApiIntegrationTest {
         try {
             java.util.concurrent.Callable<Integer> attempt = () -> {
                 assertThat(start.await(5, TimeUnit.SECONDS)).isTrue();
-                return mvc.perform(post("/api/reservations").contentType(MediaType.APPLICATION_JSON)
+                return mvc.perform(post("/api/reservations").with(jwt()).contentType(MediaType.APPLICATION_JSON)
                         .content(json)).andReturn().getResponse().getStatus();
             };
             Future<Integer> first = executor.submit(attempt);
@@ -130,7 +131,7 @@ class ApiIntegrationTest {
 
     @Test
     void partnerContactsPersistAndOnlyAdminCanReadThem() throws Exception {
-        mvc.perform(post("/api/partner-applications").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/api/partner-applications").with(jwt().jwt(j -> j.claim("email", "owner@example.kz").claim("email_verified", true))).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"venue\":\"Новая пекарня\",\"email\":\"owner@example.kz\"}"))
                 .andExpect(status().isCreated()).andExpect(jsonPath("$.id").isString())
                 .andExpect(jsonPath("$.email").doesNotExist());
@@ -144,17 +145,17 @@ class ApiIntegrationTest {
 
     @Test
     void invalidInputUnknownFieldsAndMissingResourcesReturnClientErrors() throws Exception {
-        mvc.perform(post("/api/reservations").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/api/reservations").with(jwt()).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"offerId\":\"1\",\"quantity\":0}"))
                 .andExpect(status().isBadRequest()).andExpect(jsonPath("$.errors.quantity").exists());
-        mvc.perform(post("/api/reservations").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/api/reservations").with(jwt()).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"offerId\":\"1\",\"quantity\":1,\"price\":1}"))
                 .andExpect(status().isBadRequest());
-        mvc.perform(post("/api/partner-applications").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/api/partner-applications").with(jwt().jwt(j -> j.claim("email", "owner@example.kz").claim("email_verified", true))).contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(Map.of("venue", " ", "email", "invalid"))))
                 .andExpect(status().isBadRequest());
         mvc.perform(get("/api/offers/missing")).andExpect(status().isNotFound());
-        mvc.perform(get("/api/reservations/not-a-uuid")).andExpect(status().isBadRequest());
+        mvc.perform(get("/api/reservations/not-a-uuid").with(jwt())).andExpect(status().isBadRequest());
         mvc.perform(get("/api/offers").param("category", "unknown")).andExpect(status().isBadRequest());
         mvc.perform(get("/api/offers").param("sort", "unknown")).andExpect(status().isBadRequest());
         mvc.perform(get("/api/offers").param("q", "a".repeat(201))).andExpect(status().isBadRequest());

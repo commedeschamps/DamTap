@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintViolationException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.springframework.dao.PessimisticLockingFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.QueryTimeoutException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -38,6 +39,12 @@ class ApiExceptionHandler {
             ConstraintViolationException.class})
     ProblemDetail malformed(Exception exception) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Неверный формат или значение поля запроса.");
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    ProblemDetail conflict(DataIntegrityViolationException exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT,
+                "Данные уже сохранены или изменились. Повторите запрос.");
     }
 
     @ExceptionHandler({PessimisticLockingFailureException.class, QueryTimeoutException.class})

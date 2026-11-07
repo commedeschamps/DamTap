@@ -12,6 +12,8 @@ class Reservation {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "offer_id", nullable = false)
     Offer offer;
+    @Column(length = 200)
+    String customerId; // Null for legacy anonymous records; those are not publicly readable.
     int quantity;
     // Snapshot the server's price when the reservation is made (whole KZT).
     int unitPrice;
@@ -20,8 +22,9 @@ class Reservation {
 
     protected Reservation() {}
 
-    Reservation(Offer offer, int quantity, Instant now) {
+    Reservation(Offer offer, int quantity, Instant now, String customerId) {
         id = UUID.randomUUID();
+        this.customerId = customerId;
         this.offer = offer;
         this.quantity = quantity;
         unitPrice = offer.price;

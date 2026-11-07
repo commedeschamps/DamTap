@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.UUID;
 import kz.damtap.backend.ApiModels.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,19 +43,20 @@ class ApiController {
     }
 
     @PostMapping("/reservations")
-    ResponseEntity<ReservationView> reserve(@Valid @RequestBody ReservationInput input) {
-        ReservationView result = service.reserve(input);
+    ResponseEntity<ReservationView> reserve(@Valid @RequestBody ReservationInput input, @AuthenticationPrincipal Jwt customer) {
+        ReservationView result = service.reserve(input, customer.getSubject());
         return ResponseEntity.created(URI.create("/api/reservations/" + result.id())).body(result);
     }
 
     @GetMapping("/reservations/{id}")
-    ReservationView reservation(@PathVariable UUID id) {
-        return service.reservation(id);
+    ReservationView reservation(@PathVariable UUID id, @AuthenticationPrincipal Jwt customer) {
+        return service.reservation(id, customer.getSubject());
     }
 
     @PostMapping("/partner-applications")
-    ResponseEntity<PartnerReceipt> apply(@Valid @RequestBody PartnerInput input) {
-        return ResponseEntity.status(201).body(service.apply(input));
+    ResponseEntity<PartnerReceipt> apply(@Valid @RequestBody PartnerInput input, @AuthenticationPrincipal Jwt customer) {
+        return ResponseEntity.status(201).body(service.apply(input, customer.getSubject(), customer.getClaimAsString("email"),
+                Boolean.TRUE.equals(customer.getClaim("email_verified"))));
     }
 
     @PostMapping("/admin/offers")
