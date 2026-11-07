@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowRight, ChevronDown, MapPin, Search } from "lucide-react";
 import { FormEvent } from "react";
 
@@ -10,18 +11,15 @@ export default function Hero({ query, onQueryChange, onSearch }: Props) {
   function search(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     onSearch();
-    document.getElementById("offers")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
   return (
     <section className="hero" aria-labelledby="hero-title">
-      <div className="hero-art"><Image src="/images/hero.webp" fill priority unoptimized sizes="100vw" alt="Парень с пакетом свежих продуктов на фоне Астаны" className="hero-panorama" />
-      <Image src="/images/leaves-tl.webp" alt="" width={230} height={108} className="hero-leaves hero-leaves-left" />
-      <Image src="/images/leaves-tl.webp" alt="" width={230} height={108} className="hero-leaves hero-leaves-right" /></div>
+      <div className="hero-art"><div className="hero-scene"><Image src="/images/hero-detailed.webp" fill priority sizes="100vw" alt="Парень с пакетом свежих продуктов на фоне Астаны" className="hero-panorama" /></div></div>
       <div className="hero-inner">
         <div className="hero-copy">
           <h1 id="hero-title"><span>Находите вкусное.</span>{" "}<span>Платите меньше.</span></h1>
           <p>Любимые блюда из заведений вашего города по выгодным ценам.</p>
-          <div className="hero-buttons"><a href="#offers" className="button button-primary">Смотреть предложения <ArrowRight size={17} /></a><a href="#how-it-works" className="button button-outline">Как это работает</a></div>
+          <div className="hero-buttons"><Link href="/offers" className="button button-primary">Смотреть предложения <ArrowRight size={17} /></Link><a href="#how-it-works" className="button hero-secondary">Как это работает</a></div>
         </div>
       </div>
       <form className="food-search" onSubmit={search} role="search" aria-label="Поиск еды рядом">

@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import "./fonts.css";
+import Providers from "@/components/Providers";
 import "./globals.css";
-
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin", "cyrillic"],
-  display: "swap",
-  fallback: ["Arial", "Helvetica", "sans-serif"],
-});
 
 export const metadata: Metadata = {
   title: "DamTap — вкусная еда по выгодной цене",
@@ -17,8 +11,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ru" className={manrope.variable}>
-      <body>{children}</body>
+    <html lang="ru">
+      <head>
+        <link rel="preload" href="/fonts/manrope-latin-variable.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/manrope-cyrillic-variable.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+      </head>
+      <body><Providers>{children}</Providers></body>
     </html>
   );
 }

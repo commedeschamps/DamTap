@@ -8,6 +8,7 @@ export type Offer = {
   district: string;
   address: string;
   image: string;
+  imageIsIllustration?: boolean;
   distanceKm: number;
   /** Цена в тенге. */
   price: number;
@@ -21,12 +22,11 @@ export type Offer = {
   allergens: string[];
 };
 
-export type OfferSort = "recommended" | "distance" | "price" | "ending" | "discount";
+export type OfferSort = "recommended" | "price" | "ending" | "discount";
 
 export function sortOffers(offers: Offer[], sort: OfferSort): Offer[] {
   const sorted = [...offers];
   switch (sort) {
-    case "distance": return sorted.sort((a, b) => a.distanceKm - b.distanceKm);
     case "price": return sorted.sort((a, b) => a.price - b.price);
     case "ending": return sorted.sort((a, b) => Date.parse(a.endsAt) - Date.parse(b.endsAt));
     case "discount": return sorted.sort((a, b) => (a.oldPrice > 0 ? a.price / a.oldPrice : 1) - (b.oldPrice > 0 ? b.price / b.oldPrice : 1));
@@ -45,12 +45,12 @@ export const offers: Offer[] = [
   { id: "3", title: "Том ям (остаток порций)", venue: "Sapa Asian Food", category: "ready", district: "Сарыаркинский район", address: "ул. Кенесары, 24", image: "/images/food-3.webp", distanceKm: 0.6, price: 1500, oldPrice: 2500, endsAt: expiresIn(durationHours[2]), pickupStartsAt, pickupInstructions: "Заберите суп у стойки выдачи в зале. Упаковка для супа включена.", quantityLeft: 3, allergens: ["Ракообразные", "Рыба", "Молоко"] },
   { id: "4", title: "Сет роллов (вечерний)", venue: "Sushi Time", category: "ready", district: "Алматинский район", address: "просп. Тауелсиздик, 18", image: "/images/food-4.webp", distanceKm: 1.5, price: 2200, oldPrice: 4400, endsAt: expiresIn(durationHours[3]), pickupStartsAt, pickupInstructions: "Вход с проспекта, выдача у кассы. Роллы упакованы для самовывоза.", quantityLeft: 2, allergens: ["Рыба", "Молоко", "Соя", "Глютен"] },
   { id: "5", title: "Торт «Красный бархат»", venue: "Sweet Day", category: "bakery", district: "Есильский район", address: "ул. Сыганак, 14", image: "/images/food-5.webp", distanceKm: 0.9, price: 1000, oldPrice: 2500, endsAt: expiresIn(durationHours[4]), pickupStartsAt, pickupInstructions: "Обратитесь к продавцу у витрины кондитерской. Для торта подготовлена коробка.", quantityLeft: 6, allergens: ["Глютен", "Молоко", "Яйца"] },
-  { id: "6", title: "Самса с говядиной, 4 шт.", venue: "Пекарня «Дастархан»", category: "bakery", district: "Байконырский район", address: "просп. Республики, 28", image: "/images/food-1.webp", distanceKm: 0.6, price: 1000, oldPrice: 2000, endsAt: expiresIn(durationHours[5]), pickupStartsAt, pickupInstructions: "Вход со стороны проспекта, выдача у прилавка. Возьмите сумку для упаковки.", quantityLeft: 7, allergens: ["Глютен", "Яйца", "Кунжут"] },
-  { id: "7", title: "Овощной салат с киноа", venue: "Кафе «Росток»", category: "ready", district: "Есильский район", address: "ул. Туркестан, 16", image: "/images/food-2.webp", distanceKm: 2.4, price: 1300, oldPrice: 2600, endsAt: expiresIn(durationHours[6]), pickupStartsAt, pickupInstructions: "Подойдите к стойке кафе на первом этаже. Салат выдаётся в закрытом контейнере.", quantityLeft: 4, allergens: ["Горчица"] },
+  { id: "6", title: "Самса с говядиной, 4 шт.", venue: "Пекарня «Дастархан»", category: "bakery", district: "Байконырский район", address: "просп. Республики, 28", image: "/images/category-bakery.webp", imageIsIllustration: true, distanceKm: 0.6, price: 1000, oldPrice: 2000, endsAt: expiresIn(durationHours[5]), pickupStartsAt, pickupInstructions: "Вход со стороны проспекта, выдача у прилавка. Возьмите сумку для упаковки.", quantityLeft: 7, allergens: ["Глютен", "Яйца", "Кунжут"] },
+  { id: "7", title: "Овощной салат с киноа", venue: "Кафе «Росток»", category: "ready", district: "Есильский район", address: "ул. Туркестан, 16", image: "/images/category-ready.webp", imageIsIllustration: true, distanceKm: 2.4, price: 1300, oldPrice: 2600, endsAt: expiresIn(durationHours[6]), pickupStartsAt, pickupInstructions: "Подойдите к стойке кафе на первом этаже. Салат выдаётся в закрытом контейнере.", quantityLeft: 4, allergens: ["Горчица"] },
   { id: "8", title: "Суп с морепродуктами", venue: "Кафе «Лемонграсс»", category: "ready", district: "Алматинский район", address: "просп. Абылай хана, 8", image: "/images/food-3.webp", distanceKm: 1.8, price: 1700, oldPrice: 3400, endsAt: expiresIn(durationHours[7]), pickupStartsAt, pickupInstructions: "Вход со двора, выдача у администратора кафе. Упаковка для супа включена.", quantityLeft: 3, allergens: ["Рыба", "Ракообразные"] },
 ];
 
-/** На каждом открытии страницы демо-предложения получают актуальные сроки. */
+/** Сроки демонстрационных предложений относительно начала сессии. */
 export function getOffers(now = Date.now()): Offer[] {
   return offers.map((offer, index) => ({
     ...offer,

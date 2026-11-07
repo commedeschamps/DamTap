@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local tools and editor settings
+/.agents/
+/.idea/
+/.impeccable/
+/skills-lock.json
+
+# source design packs (runtime assets live in public/)
+/design/
+/DamTap_Assets_Pack_1/
+/DamTap_Food_Assets_Pack_2/

@@ -1,31 +1,41 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, SearchX } from "lucide-react";
-import { useEffect, useRef } from "react";
+import Link from "next/link";
+import useEmblaCarousel from "embla-carousel-react";
+import { useReducedMotion } from "motion/react";
+import { ArrowDownUp, ArrowLeft, ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import type { Offer, OfferSort } from "@/data/offers";
+import { sortOptions } from "@/lib/catalogue";
 import OfferCard from "./OfferCard";
+import SelectControl from "./SelectControl";
 
-const sortOptions: { value: OfferSort; label: string }[] = [
-  { value: "recommended", label: "По умолчанию" }, { value: "distance", label: "Сначала ближе" },
-  { value: "price", label: "Сначала дешевле" }, { value: "ending", label: "Скоро закончатся" },
-  { value: "discount", label: "Больше скидка" },
-];
-
-type Props = { offers: Offer[]; totalCount: number; sort: OfferSort; onSort: (sort: OfferSort) => void; favoriteIds: string[]; onFavorite: (id: string) => void; onOpen: (offer: Offer) => void; onViewAll: () => void; onReset: () => void; showAll: boolean; filtered: boolean; favoritesOnly: boolean };
-
-export default function OfferStrip({ offers, totalCount, sort, onSort, favoriteIds, onFavorite, onOpen, onViewAll, onReset, showAll, filtered, favoritesOnly }: Props) {
-  const strip = useRef<HTMLDivElement>(null);
+type Props = { offers: Offer[]; totalCount: number; sort: OfferSort; onSort: (sort: OfferSort) => void; favoriteIds: string[]; onFavorite: (id: string) => void };
+export default function OfferStrip({ offers, totalCount, sort, onSort, favoriteIds, onFavorite }: Props) {
+  const reducedMotion = useReducedMotion();
+  const [viewport, carousel] = useEmblaCarousel({ align: "start", containScroll: "trimSnaps", loop: false, duration: reducedMotion ? 0 : 25 });
+  const [navigation, setNavigation] = useState({ selected: 0, count: 0, previous: false, next: false });
   const offerIds = offers.map(offer => offer.id).join(",");
-  useEffect(() => { if (strip.current) strip.current.scrollLeft = 0; }, [offerIds]);
-  return (
-    <section className="offer-section page-container" id="offers" aria-labelledby="offers-title">
-      <div className="section-heading"><h2 id="offers-title">{favoritesOnly ? "Ваше избранное" : "Вкусное рядом"}</h2>{totalCount > 5 && <button className="text-link" onClick={onViewAll}>{showAll ? "Свернуть" : "Смотреть все"}<ArrowRight size={18} /></button>}</div>
-      {favoritesOnly && <p className="favorites-note">Избранное сохраняется в этом браузере — можно вернуться к нему позже.</p>}
-      <div className="offer-toolbar">
-        <div className="filter-status" role="status">Показано: {offers.length} из {totalCount}{(filtered || sort !== "recommended") && <button onClick={onReset}>Сбросить фильтры</button>}</div>
-        <label className="offer-sort">Сортировка<select value={sort} onChange={event => onSort(event.target.value as OfferSort)}>{sortOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label>
-      </div>
-      {offers.length > 0 ? <div className="strip-wrap"><div className="offer-strip" ref={strip} tabIndex={0} aria-label="Предложения. Прокрутите, чтобы увидеть больше">{offers.map(offer => <OfferCard key={offer.id} offer={offer} favorite={favoriteIds.includes(offer.id)} onFavorite={() => onFavorite(offer.id)} onOpen={() => onOpen(offer)} />)}</div><div className="strip-controls"><button className="strip-arrow" aria-label="Предыдущие предложения" onClick={() => strip.current?.scrollBy({ left: -280, behavior: "smooth" })}><ArrowLeft size={18} /></button><button className="strip-arrow" aria-label="Следующие предложения" onClick={() => strip.current?.scrollBy({ left: 280, behavior: "smooth" })}><ArrowRight size={18} /></button></div></div> : <div className="empty-state"><SearchX size={30} /><h3>{favoritesOnly ? "Здесь появятся блюда, которые вам понравились." : "По вашему запросу пока ничего не найдено."}</h3><p>{favoritesOnly ? "Нажмите на сердечко, чтобы сохранить блюдо." : "Попробуйте другой запрос или посмотрите все продукты рядом."}</p><button className="button button-outline" onClick={onReset}>Все предложения</button></div>}
-    </section>
-  );
+  useEffect(() => {
+    if (!carousel) return;
+    const sync = () => setNavigation({ selected: carousel.selectedScrollSnap(), count: carousel.scrollSnapList().length, previous: carousel.canScrollPrev(), next: carousel.canScrollNext() });
+    sync();
+    carousel.on("select", sync).on("reInit", sync);
+    return () => { carousel.off("select", sync).off("reInit", sync); };
+  }, [carousel]);
+  useEffect(() => { carousel?.scrollTo(0, true); }, [carousel, offerIds]);
+  return <section className="offer-section page-container" id="offers" aria-labelledby="offers-title" aria-roledescription="карусель">
+    <div className="section-heading"><h2 id="offers-title">Вкусное рядом</h2><Link className="text-link" href={`/offers${sort === "recommended" ? "" : `?sort=${sort}`}`}>Смотреть все<ArrowRight size={18} /></Link></div>
+    {offers.length > 0 ? <div className="offer-toolbar"><p className="filter-status">Показано: {offers.length} из {totalCount}</p><div className="offer-sort"><SelectControl label="Сортировка" value={sort} onValueChange={value => onSort(value as OfferSort)} options={sortOptions} icon={<ArrowDownUp size={16} />} /></div></div> : <p className="demo-note">Сроки демонстрационных предложений истекли. На сегодня предложений больше нет.</p>}
+    <div className="offer-carousel-viewport" ref={viewport} tabIndex={0} aria-label="Лента предложений. Используйте стрелки влево и вправо" onKeyDown={event => {
+      if (event.target !== event.currentTarget) return;
+      if (event.key === "ArrowLeft") { event.preventDefault(); carousel?.scrollPrev(!!reducedMotion); }
+      if (event.key === "ArrowRight") { event.preventDefault(); carousel?.scrollNext(!!reducedMotion); }
+      if (event.key === "Home") { event.preventDefault(); carousel?.scrollTo(0, !!reducedMotion); }
+      if (event.key === "End") { event.preventDefault(); carousel?.scrollTo(navigation.count - 1, !!reducedMotion); }
+    }}>
+      <div className="offer-carousel-track">{offers.map((offer, index) => <div className="offer-slide" key={offer.id} role="group" aria-roledescription="слайд" aria-label={`${index + 1} из ${offers.length}`}><OfferCard offer={offer} favorite={favoriteIds.includes(offer.id)} onFavorite={() => onFavorite(offer.id)} /></div>)}</div>
+    </div>
+    {navigation.count > 1 && <div className="carousel-navigation"><div className="carousel-dots" aria-label="Позиции ленты">{Array.from({ length: navigation.count }, (_, index) => <button key={index} aria-label={`Позиция ${index + 1}`} aria-current={navigation.selected === index ? "true" : undefined} onClick={() => carousel?.scrollTo(index, !!reducedMotion)}><span /></button>)}</div><span className="carousel-position" aria-live="polite">{navigation.selected + 1} / {navigation.count}</span><div className="strip-controls"><button className="strip-arrow" disabled={!navigation.previous} aria-label="Предыдущие предложения" onClick={() => carousel?.scrollPrev(!!reducedMotion)}><ArrowLeft size={18} /></button><button className="strip-arrow" disabled={!navigation.next} aria-label="Следующие предложения" onClick={() => carousel?.scrollNext(!!reducedMotion)}><ArrowRight size={18} /></button></div></div>}
+  </section>;
 }

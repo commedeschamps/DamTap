@@ -1,10 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { Heart, MapPin, Timer } from "lucide-react";
+import Link from "next/link";
+import { Clock3, MapPin, Package, Timer } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { Offer } from "@/data/offers";
+import FavoriteButton from "./FavoriteButton";
 
+const pickupFormat = new Intl.DateTimeFormat("ru-RU", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Almaty" });
 const priceFormat = new Intl.NumberFormat("ru-RU");
 export const formatPrice = (price: number) => `${priceFormat.format(price)} ₸`;
 
@@ -22,17 +25,23 @@ function Countdown({ endsAt }: { endsAt: string }) {
   return <span className="countdown" role="timer" aria-label={remaining === 0 ? "Предложение завершено" : `До окончания: ${hours} часов ${minutes} минут ${seconds} секунд`}><Timer size={16} aria-hidden="true" /><span>{remaining === 0 ? "Завершено" : `${hours}:${minutes}:${seconds}`}</span></span>;
 }
 
-export default function OfferCard({ offer, favorite, onFavorite, onOpen }: { offer: Offer; favorite: boolean; onFavorite: () => void; onOpen: () => void }) {
+type Props = { offer: Offer; favorite: boolean; onFavorite: () => void; href?: string };
+export default function OfferCard({ offer, favorite, onFavorite, href = `/offers/${offer.id}` }: Props) {
   const discount = offer.oldPrice > 0 ? Math.round((1 - offer.price / offer.oldPrice) * 100) : 0;
-  return (
-    <article className="offer-card">
-      <div className="offer-image">
-        <button className="offer-image-link" onClick={onOpen} aria-label={`Подробнее: ${offer.title}`}><Image src={offer.image} alt={offer.title} fill sizes="(max-width: 600px) 260px, (max-width: 1000px) 280px, 20vw" /></button>
-        <span className="discount">−{discount}%</span>
-        <button className="offer-favorite" onClick={onFavorite} aria-pressed={favorite} aria-label={`${favorite ? "Убрать из избранного" : "Добавить в избранное"}: ${offer.title}`}><Heart size={22} fill={favorite ? "currentColor" : "none"} /></button>
-        <span className="distance"><MapPin size={12} aria-hidden="true" />{offer.distanceKm.toLocaleString("ru-RU")} км</span>
-      </div>
-      <div className="offer-body"><h3><button onClick={onOpen}>{offer.title}</button></h3><p className="venue">{offer.venue}</p><div className="offer-bottom"><div className="prices"><strong>{formatPrice(offer.price)}</strong><del>{formatPrice(offer.oldPrice)}</del></div><Countdown endsAt={offer.endsAt} /></div></div>
-    </article>
-  );
+  return <article className="offer-card">
+    <div className={`offer-image${offer.imageIsIllustration ? " offer-image-illustration" : ""}`}>
+      <Link className="offer-image-link" href={href} aria-label={`Подробнее: ${offer.title}`}><Image src={offer.image} alt={offer.imageIsIllustration ? "Иллюстрация категории продуктов" : offer.title} fill sizes="(max-width: 600px) 400px, (max-width: 1000px) 360px, 380px" /></Link>
+      <span className="discount">−{discount}%</span>
+      <FavoriteButton className="offer-favorite" favorite={favorite} onToggle={onFavorite} label={`${favorite ? "Убрать из избранного" : "Добавить в избранное"}: ${offer.title}`} hint={favorite ? "Убрать из избранного" : "Сохранить на потом"} />
+      {offer.imageIsIllustration && <span className="image-caption">Иллюстрация</span>}
+    </div>
+    <div className="offer-body">
+      <h3><Link href={href}>{offer.title}</Link></h3><p className="venue">{offer.venue}</p>
+      <div className="card-price-row"><div className="prices"><strong>{formatPrice(offer.price)}</strong><del>{formatPrice(offer.oldPrice)}</del></div></div>
+      <p className="card-stock"><Package size={14} aria-hidden="true" /><span>Порций в демо: {offer.quantityLeft}</span></p>
+      <p className="card-location"><MapPin size={14} aria-hidden="true" /><span>{offer.district} · {offer.distanceKm.toLocaleString("ru-RU")} км</span></p>
+      <p className="card-pickup"><Clock3 size={14} aria-hidden="true" /><span>Самовывоз <time dateTime={offer.pickupStartsAt}>{pickupFormat.format(new Date(offer.pickupStartsAt))}</time>–<time dateTime={offer.endsAt}>{pickupFormat.format(new Date(offer.endsAt))}</time></span></p>
+      <div className="offer-bottom"><span className="card-deadline">До окончания</span><Countdown endsAt={offer.endsAt} /></div>
+    </div>
+  </article>;
 }
